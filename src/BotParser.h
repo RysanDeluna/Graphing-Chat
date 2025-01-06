@@ -1,23 +1,16 @@
-#include <fstream>
-#include <string>
-#include <nlohmann/json.hpp>
-#include "Graph.h"
+#pragma once
 
-using json = nlohmann::json;
+#include "Graph.h"
+#include "JsonParser.h"
 
 class BotParser {
 private:
 	int numIntents;
 	json botJson;
 
-	void _checkStructure(json j, int maxDepth, int depth);
-
 public:
 	BotParser(std::string file);
 	~BotParser() = default;
 
-	void printJson();
-	void readJson(std::string file);
-	void checkStructure(int depth);
 	Graph generateGraph();
 };
