@@ -5,8 +5,12 @@
 #include <iostream>
 
 // Adjascent list is better in this case, cos we only need to create the graph once
-// - They are efficient for running across elements
+// - They are efficient for visiting nodes
 
+
+/*
+	Node abstraction
+*/
 struct Node {
 	int id;
 	std::list<std::shared_ptr<Node> > ptr;
@@ -20,6 +24,11 @@ struct Node {
 	}
 };
 
+
+/*
+	Helper class for constructing the graph and implements
+	its algorithms 
+*/
 class Graph {
 private:
 	std::list<Node> adjList;

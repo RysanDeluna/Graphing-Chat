@@ -3,6 +3,11 @@
 #include "Graph.h"
 #include "JsonParser.h"
 
+
+/*
+	Have the Bot Json file and will be responsible
+	to do operations and retrieve information from it
+*/
 class BotParser {
 private:
 	int numIntents;
