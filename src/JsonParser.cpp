@@ -1,7 +1,7 @@
 ﻿#include "JsonParser.h"
 #include <iostream>
 
-void JsonParser::printJson(json j)
+void JsonParser::printJson(const json& j)
 {
 	std::cout << j.dump(4);
 }
@@ -12,7 +12,7 @@ json JsonParser::readJson(std::string file)
 	return json::parse(f);
 }
 
-void JsonParser::_checkStructure(json j, std::map<unsigned int, std::unordered_set<std::string>>& showed, int maxDepth = -1, int depth = 0)
+void JsonParser::_checkStructure(const json& j, std::map<unsigned int, std::unordered_set<std::string>>& showed, int maxDepth = -1, int depth = 0)
 {
 	const std::string indent = "  ";
 	const std::string branch = "|-- "; // Alternativa para ├──
@@ -33,10 +33,30 @@ void JsonParser::_checkStructure(json j, std::map<unsigned int, std::unordered_s
 	}
 }
 
-void JsonParser::checkStructure(json j, int depth)
+void JsonParser::checkStructure(const json& j, int depth)
 {
 	std::map<unsigned int, std::unordered_set<std::string>> showed;
 	for (int i = 1; i <= depth; i++)
 		showed.insert(std::pair<int, std::unordered_set<std::string>>(i, std::unordered_set<std::string>()));
 	_checkStructure(j, showed, depth, 0);
+}
+
+const json::iterator JsonParser::findKey(const json& j, std::string key)
+{
+	std::stack<std::shared_ptr<json>> st;
+	std::shared_ptr<json> p_j = std::make_shared<json>(j); 
+	st.push(p_j);
+	do {
+		auto it = p_j->find(key);
+		if (it != p_j->end()) return it;
+		for (auto& el : p_j->items())
+		{
+			json temp = el.value(); 
+			if (temp.is_object() || temp.is_array())
+				st.push(std::make_shared<json>(temp));
+		}
+		p_j.swap(st.top());
+		st.pop();
+	} while (!st.empty());
+	return p_j->end();
 }
