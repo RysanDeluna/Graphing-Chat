@@ -21,7 +21,10 @@ public:
 	// Getter
 	const json getJson();
 
+	// Set
+	void set_bot(std::string file);
+
 	// Operations
-	const json::iterator findKey(std::string);
-	std::list<json::iterator> findKeys(std::string, const json&);
+	const json findKey(std::string);
+	std::list<json> findKeys(std::string, const json&);
 };

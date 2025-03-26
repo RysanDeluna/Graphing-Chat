@@ -18,9 +18,15 @@ const json BotParser::getJson()
 	return botJson;
 }
 
-const json::iterator BotParser::findKey(std::string key)
+const json BotParser::findKey(std::string key)
 {
 	return JsonParser::findKey(botJson, key);
+}
+
+void BotParser::set_bot(std::string file) 
+{
+	botJson = JsonParser::readJson(file);
+	generateGraph();
 }
 
 

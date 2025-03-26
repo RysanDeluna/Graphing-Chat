@@ -19,5 +19,5 @@ public:
 	static json readJson(std::string file);
 	static void printJson(const json& );
 	static void checkStructure(const json& , int depth);
-	static const json::iterator findKey(const json&, std::string);
+	static const json findKey(const json&, std::string);
 };

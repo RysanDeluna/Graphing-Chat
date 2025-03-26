@@ -9,7 +9,9 @@ void JsonParser::printJson(const json& j)
 json JsonParser::readJson(std::string file)
 {
 	std::fstream f(file);
-	return json::parse(f);
+	if (f.is_open())
+		return json::parse(f);
+	return json();
 }
 
 void JsonParser::_checkStructure(const json& j, std::map<unsigned int, std::unordered_set<std::string>>& showed, int maxDepth = -1, int depth = 0)
@@ -41,14 +43,15 @@ void JsonParser::checkStructure(const json& j, int depth)
 	_checkStructure(j, showed, depth, 0);
 }
 
-const json::iterator JsonParser::findKey(const json& j, std::string key)
+const json JsonParser::findKey(const json& j, std::string key)
 {
 	std::stack<std::shared_ptr<json>> st;
-	std::shared_ptr<json> p_j = std::make_shared<json>(j); 
+	std::shared_ptr<json> p_j = std::make_shared<json>(j);
 	st.push(p_j);
 	do {
 		auto it = p_j->find(key);
-		if (it != p_j->end()) return it;
+		if (it != p_j->end()) 
+			return *it;
 		for (auto& el : p_j->items())
 		{
 			json temp = el.value(); 
@@ -58,5 +61,5 @@ const json::iterator JsonParser::findKey(const json& j, std::string key)
 		p_j.swap(st.top());
 		st.pop();
 	} while (!st.empty());
-	return p_j->end();
+	return nullptr;
 }
